@@ -20,10 +20,21 @@ public Customer(String FirstName,String LastName,String Address,String Employer)
 
 //Creating customer savings account//
 public SavingsAccount openSavings(String AccNo, String branch){
-  return new SavingsAccount(accNo,this,branch);
+  return new SavingsAccount(AccNo,this,branch);
 }
 
-//Creatin customer Investment accont//
+//Creating customer Investment account//
 public InvestmentAccount openInvestment(String AccNo, String branch, double deposit){
-  return new InvestmentAccount(accNo,this,branch,deposit);
+  return new InvestmentAccount(AccNo,this,branch,deposit);
 }
+
+//Creating customer Cheque Account//
+public ChequeAccount openCheque(String AccNo, String branch, String employer){
+  return new ChequeAccount(AccNo,this,branch,employer);
+}
+
+//Getters//
+public String getFirstName() { return FirstName; }
+public String getLastName() { return LastName; }
+public String getAddress() { return Address; }
+public String getEmployer() { return Employer; }
