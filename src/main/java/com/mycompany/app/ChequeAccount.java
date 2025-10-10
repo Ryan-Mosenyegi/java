@@ -1,8 +1,7 @@
 package com.mycompany.app;
 
-/**
- * A cheque account mainly for employees, allows normal withdrawals.
- */
+// A cheque account mainly for employees, allows normal withdrawals.
+ 
 public class ChequeAccount extends Account {
     private String employer;
 
@@ -11,6 +10,7 @@ public class ChequeAccount extends Account {
         this.employer = employer;
     }
 
+    
     @Override
     public void withdraw(double amount) {
         if (balance >= amount) {
