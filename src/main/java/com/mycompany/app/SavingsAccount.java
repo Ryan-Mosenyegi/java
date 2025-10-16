@@ -22,3 +22,4 @@ public class SavingsAccount extends Account implements MonthlyInterest {
         System.out.println("Monthly interest added: " + interest + " BWP.");
     }
 }
+//for transcation time and date, accunt, type of transcation, amount
