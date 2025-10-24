@@ -1,35 +1,18 @@
-package com.mycompany.app;
+package com.example.javaasignment;
 
-/**
- * An investment account that earns higher interest
- * and allows withdrawals if the balance is sufficient.
- */
-public class InvestmentAccount extends Account implements MonthlyInterest {
-    private double minimumDeposit = 500.0;
-
-    public InvestmentAccount(String accountNumber, Customer owner, String branch, double initialDeposit) {
-        super(accountNumber, owner, branch);
-        if (initialDeposit >= minimumDeposit) {
-            deposit(initialDeposit);
-        } else {
-            throw new IllegalArgumentException("Minimum initial deposit is 500 BWP.");
-        }
+public class InvestmentAccount extends Account implements Withdrawable, MonthlyInterest {
+    public InvestmentAccount(String accNo, Customer customer, String branch) {
+        super(accNo, customer, branch);
     }
 
     @Override
     public void withdraw(double amount) {
-        if (balance >= amount) {
-            balance -= amount;
-            System.out.println("Withdrawn " + amount + " BWP from Investment Account.");
-        } else {
-            System.out.println("Insufficient balance.");
-        }
+        if (amount <= balance)
+            balance -= amount + 20; // penalty fee
     }
 
     @Override
     public void applyMonthlyInterest() {
-        double interest = balance * 0.05; // 5%
-        balance += interest;
-        System.out.println("Investment interest added: " + interest + " BWP.");
+        balance += balance * 0.05;
     }
 }
