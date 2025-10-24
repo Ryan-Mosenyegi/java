@@ -1,40 +1,37 @@
 package com.mycompany.app;
-//for each customer of the bank//
-public class Customer{
-  //Customer Attributes//
-  private String FirstName;
-  private String LastName;
-  private String Address;
-  private String Employer;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Customer {
+    private String firstName, lastName, address, employer;
+    private List<Account> accounts = new ArrayList<>();
+
+    public Customer(String first, String last, String addr, String emp) {
+        this.firstName = first;
+        this.lastName = last;
+        this.address = addr;
+        this.employer = emp;
+    }
+
+    public String getFullName() { return firstName + " " + lastName; }
+    public List<Account> getAccounts() { return accounts; }
+
+    public SavingsAccount openSavings(String accNo, String branch) {
+        SavingsAccount acc = new SavingsAccount(accNo, this, branch);
+        accounts.add(acc);
+        return acc;
+    }
+
+    public InvestmentAccount openInvestment(String accNo, String branch) {
+        InvestmentAccount acc = new InvestmentAccount(accNo, this, branch);
+        accounts.add(acc);
+        return acc;
+    }
+
+    public ChequeAccount openCheque(String accNo, String branch, String employer) {
+        ChequeAccount acc = new ChequeAccount(accNo, this, branch, employer);
+        accounts.add(acc);
+        return acc;
+    }
 }
-
-//constractor to initialize customer//
-public Customer(String FirstName,String LastName,String Address,String Employer){
-  this.FirstName = FirstName;
-  this.LastName =LastName;
-  this.Address = Address;
-  this.Employer = Employers;
-}
-
-//*so next ke dibehaviour/methods of Customer class*//
-
-//Creating customer savings account//
-public SavingsAccount openSavings(String AccNo, String branch){
-  return new SavingsAccount(AccNo,this,branch);
-}
-
-//Creating customer Investment account//
-public InvestmentAccount openInvestment(String AccNo, String branch, double deposit){
-  return new InvestmentAccount(AccNo,this,branch,deposit);
-}
-
-//Creating customer Cheque Account//
-public ChequeAccount openCheque(String AccNo, String branch, String employer){
-  return new ChequeAccount(AccNo,this,branch,employer);
-}
-
-//Getters//
-public String getFirstName() { return FirstName; }
-public String getLastName() { return LastName; }
-public String getAddress() { return Address; }
-public String getEmployer() { return Employer; }
