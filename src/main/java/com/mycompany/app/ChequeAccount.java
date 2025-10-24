@@ -1,27 +1,16 @@
 package com.mycompany.app;
 
-// A cheque account mainly for employees, allows normal withdrawals.
- 
-public class ChequeAccount extends Account {
+public class ChequeAccount extends Account implements Withdrawable {
     private String employer;
 
-    public ChequeAccount(String accountNumber, Customer owner, String branch, String employer) {
-        super(accountNumber, owner, branch);
+    public ChequeAccount(String accNo, Customer customer, String branch, String employer) {
+        super(accNo, customer, branch);
         this.employer = employer;
     }
 
-    
     @Override
     public void withdraw(double amount) {
-        if (balance >= amount) {
+        if (amount <= balance)
             balance -= amount;
-            System.out.println("Withdrawn " + amount + " BWP from Cheque Account.");
-        } else {
-            System.out.println("Insufficient balance.");
-        }
-    }
-
-    public String getEmployer() {
-        return employer;
     }
 }
