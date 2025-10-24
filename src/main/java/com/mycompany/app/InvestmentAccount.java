@@ -1,4 +1,4 @@
-package com.example.javaasignment;
+package com.mycompany.app;
 
 public class InvestmentAccount extends Account implements Withdrawable, MonthlyInterest {
     public InvestmentAccount(String accNo, Customer customer, String branch) {
