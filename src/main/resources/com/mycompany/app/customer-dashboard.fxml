@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.mycompany.app.CustomerDashboardController"
+            prefHeight="400.0" prefWidth="600.0">
+    <top>
+        <HBox spacing="10">
+            <Label text="Customer Dashboard" style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="10">
+            <Label fx:id="welcomeLabel"/>
+            <ListView fx:id="accountsList" prefHeight="180"/>
+            <GridPane hgap="8" vgap="8">
+                <Label text="Create Account:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="accountTypeCombo" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Button text="Create" onAction="#onCreateAccount" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+
+                <Label text="Amount:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="amountField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Account Password:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <PasswordField fx:id="acctPasswordField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Button text="Deposit" onAction="#onDeposit" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                <Button text="Withdraw" onAction="#onWithdraw" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+                <Button text="Apply Interest" onAction="#onApplyInterest" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            </GridPane>
+            <Label fx:id="messageLabel"/>
+        </VBox>
+    </center>
+</BorderPane>

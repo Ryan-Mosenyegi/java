@@ -4,34 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
-    private String firstName, lastName, address, employer;
+    private String customerId;
+    private String firstName;
+    private String lastName;
+    private String address;
+    private String password; // Customer login password
     private List<Account> accounts = new ArrayList<>();
 
-    public Customer(String first, String last, String addr, String emp) {
+    public Customer(String id, String first, String last, String address, String password) {
+        this.customerId = id;
         this.firstName = first;
         this.lastName = last;
-        this.address = addr;
-        this.employer = emp;
+        this.address = address;
+        this.password = password;
     }
 
+    public String getCustomerId() { return customerId; }
+    public String getPassword() { return password; }
     public String getFullName() { return firstName + " " + lastName; }
-    public List<Account> getAccounts() { return accounts; }
 
-    public SavingsAccount openSavings(String accNo, String branch) {
-        SavingsAccount acc = new SavingsAccount(accNo, this, branch);
-        accounts.add(acc);
-        return acc;
+    public void addAccount(Account a) {
+        accounts.add(a);
     }
 
-    public InvestmentAccount openInvestment(String accNo, String branch) {
-        InvestmentAccount acc = new InvestmentAccount(accNo, this, branch);
-        accounts.add(acc);
-        return acc;
-    }
-
-    public ChequeAccount openCheque(String accNo, String branch, String employer) {
-        ChequeAccount acc = new ChequeAccount(accNo, this, branch, employer);
-        accounts.add(acc);
-        return acc;
+    public List<Account> getAccounts() {
+        return accounts;
     }
 }

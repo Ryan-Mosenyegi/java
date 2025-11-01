@@ -1,18 +1,21 @@
 package com.mycompany.app;
 
-public class InvestmentAccount extends Account implements Withdrawable, MonthlyInterest {
-    public InvestmentAccount(String accNo, Customer customer, String branch) {
-        super(accNo, customer, branch);
-    }
+public class InvestmentAccount extends Account implements ApplyInterest {
+    //FIX THIS IT suppose to have 0.05 in its inetrface
+    private double interestRate = 0.05; // 5% monthly
 
-    @Override
-    public void withdraw(double amount) {
-        if (amount <= balance)
-            balance -= amount + 20; // penalty fee
+    public InvestmentAccount(String accNo, String customerId, String password) {
+        super(accNo, customerId, password);
     }
 
     @Override
     public void applyMonthlyInterest() {
-        balance += balance * 0.05;
+        double interest = getBalance() * interestRate;
+        deposit(interest);
+    }
+
+    @Override
+    public String toString() {
+        return "Investment Account - " + getAccountNumber();
     }
 }
