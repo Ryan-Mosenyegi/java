@@ -1,5 +1,6 @@
 package com.mycompany.app;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -9,36 +10,58 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent;
+import java.io.IOException;
 
 public class CustomerLoginController {
-    @FXML private TextField customerIdField;
-    @FXML private PasswordField passwordField;
-    @FXML private Label messageLabel;
 
-    private Bank bank = Bank.getInstance();
+    @FXML
+    private TextField customerIdField;
 
+    @FXML
+    private PasswordField passwordField;
+
+    @FXML
+    private Label messageLabel;
+
+    private final Bank bank = Bank.getInstance();
+
+    /**
+     * Handles customer login validation and scene transition to the dashboard.
+     */
     @FXML
     protected void onLogin(ActionEvent event) throws Exception {
         String id = customerIdField.getText().trim();
         String pass = passwordField.getText();
 
         if (id.isEmpty() || pass.isEmpty()) {
-            messageLabel.setText("Enter ID and password.");
+            messageLabel.setText("Please enter both Customer ID and Password.");
             return;
         }
 
         Customer c = bank.loginCustomer(id, pass);
         if (c == null) {
-            messageLabel.setText("Invalid credentials.");
+            messageLabel.setText("Invalid credentials. Try again.");
             return;
         }
 
-        // set session and open customer dashboard
+        // Store session info and open customer dashboard
         SessionManager.setCurrentCustomer(c);
         Parent root = FXMLLoader.load(getClass().getResource("customer-dashboard.fxml"));
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root, 700, 500));
+        stage.setTitle("Customer Dashboard");
+        stage.show();
+    }
+
+    /**
+     * Handles the Back button — returns to the main Home view.
+     */
+    @FXML
+    protected void onBack(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("hello-view.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setTitle("Banking System - Home");
         stage.show();
     }
 }

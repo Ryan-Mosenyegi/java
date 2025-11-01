@@ -1,23 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.geometry.Insets?>
-<GridPane alignment="CENTER" xmlns="http://javafx.com/javafx"
+<GridPane alignment="CENTER"
+          xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
-          fx:controller="com.mycompany.app.AdminLoginController">
+          fx:controller="com.mycompany.app.AdminLoginController"
+          hgap="10" vgap="10">
+
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
-    <Label text="Staff Login" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2" style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+
+    <Label text="Staff Login"
+           GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2"
+           style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+
     <Label text="Username:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
     <TextField fx:id="usernameField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
     <Label text="Password:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
     <PasswordField fx:id="passwordField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-    <Button text="Login" onAction="#onLogin" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-    <Label fx:id="messageLabel" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+
+    <HBox spacing="10" GridPane.rowIndex="3" GridPane.columnIndex="1" alignment="CENTER_RIGHT">
+        <Button text="Back" onAction="#onBack"/>
+        <Button text="Login" onAction="#onLogin"/>
+    </HBox>
+
+    <Label fx:id="messageLabel"
+           GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2"
+           style="-fx-text-fill:red;"/>
 </GridPane>

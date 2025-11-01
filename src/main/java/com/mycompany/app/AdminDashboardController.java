@@ -2,9 +2,16 @@ package com.mycompany.app;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
+import java.io.IOException;
 
 public class AdminDashboardController {
     @FXML private ListView<String> customersList;
@@ -43,5 +50,17 @@ public class AdminDashboardController {
         }
         messageLabel.setText("Applied interest to " + count + " accounts.");
         refresh();
+    }
+
+
+
+    @FXML
+    public void onBack(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("hello-view.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Banking System - Home");
+        stage.show();
     }
 }
