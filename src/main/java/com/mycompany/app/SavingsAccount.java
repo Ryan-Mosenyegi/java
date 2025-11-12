@@ -1,12 +1,10 @@
 package com.mycompany.app;
 
-public class SavingsAccount extends Account implements Withdrawable, ApplyInterest {
-
-    private double interestRate = 0.005; // 0.5% monthly
+public class SavingsAccount extends Account implements Withdrawable, MonthlyInterest {
 
     public SavingsAccount(String accNo, String customerId, String password) {
         super(accNo, customerId, password);
-    }//CONSTRUCTOR CHAINING
+    }
 
     @Override
     public void withdraw(double amount) {
@@ -16,9 +14,10 @@ public class SavingsAccount extends Account implements Withdrawable, ApplyIntere
     }
 
     @Override
-    public void applyMonthlyInterest() {
-        double interest = getBalance() * interestRate;
-        deposit(interest);
+    public void applyMonthlyInterest(Account account) {
+        double interestRate = 0.005; // 0.5% for savings
+        double interest = account.getBalance() * interestRate;
+        account.deposit(interest);
     }
 
     @Override

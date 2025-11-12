@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/mycompany/app/WelcomeScreen.fxml"));
         Scene scene = new Scene(loader.load(), 600, 400);
         stage.setTitle("Banking System");
         stage.setScene(scene);

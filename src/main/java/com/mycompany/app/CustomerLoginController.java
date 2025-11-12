@@ -54,14 +54,26 @@ public class CustomerLoginController {
     }
 
     /**
-     * Handles the Back button — returns to the main Home view.
+     * Navigates back to the welcome screen.
      */
     @FXML
     protected void onBack(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("hello-view.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("WelcomeScreen.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root, 600, 400));
         stage.setTitle("Banking System - Home");
+        stage.show();
+    }
+
+    /**
+     * Opens the customer registration screen.
+     */
+    @FXML
+    protected void onRegister(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("customer-register.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setTitle("Customer Registration");
         stage.show();
     }
 }
