@@ -15,7 +15,7 @@ public class SavingsAccount extends Account implements Withdrawable, MonthlyInte
 
     @Override
     public void applyMonthlyInterest(Account account) {
-        double interestRate = 0.005; // 0.5% for savings
+        double interestRate = 0.005; // 0.05% for savings
         double interest = account.getBalance() * interestRate;
         account.deposit(interest);
     }

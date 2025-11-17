@@ -8,7 +8,7 @@ public class InvestmentAccount extends Account implements MonthlyInterest {
 
     @Override
     public void applyMonthlyInterest(Account account) {
-        double interestRate = 0.02; // 2% monthly
+        double interestRate = 0.05; // 5% monthly
         double interest = account.getBalance() * interestRate;
         account.deposit(interest);
     }

@@ -16,7 +16,7 @@ public class Bank {
         return instance;
     }
 
-    // ✅ Customer Registration
+    //Customer Registration
     public Customer registerCustomer(String first, String last, String address, String password) {
         String newId = "C" + (++customerCounter);
         Customer c = new Customer(newId, first, last, address, password);
@@ -24,7 +24,7 @@ public class Bank {
         return c;
     }
 
-    // ✅ Customer Login Check
+    //Customer Login Check
     public Customer loginCustomer(String id, String password) {
         for (Customer c : customers)
             if (c.getCustomerId().equals(id) && c.getPassword().equals(password))
@@ -32,7 +32,7 @@ public class Bank {
         return null;
     }
 
-    // ✅ Create Account for Customer
+    // Create Account for Customer
     public Account createAccount(Customer customer, String type) {
         String accNo = "A" + (++accountCounter);
         String pass = customer.getPassword(); // Same password for simplicity
@@ -50,7 +50,7 @@ public class Bank {
         return acc;
     }
 
-    // ✅ Find Account by Number
+    // Find Account by Number
     public Account findAccount(String accNo) {
         for (Customer c : customers) {
             for (Account a : c.getAccounts()) {
@@ -62,12 +62,12 @@ public class Bank {
         return null;
     }
 
-    // ✅ Get all customers
+    // Get all customers
     public List<Customer> getCustomers() {
         return customers;
     }
 
-    // ✅ Get all bank accounts
+    // Get all bank accounts
     public List<Account> getAllAccounts() {
         List<Account> all = new ArrayList<>();
         for (Customer c : customers) {

@@ -29,7 +29,6 @@ public class AdminRegisterController {
             return;
         }
 
-        // TODO: Replace this with your own persistence logic
         messageLabel.setText("✅ Registration successful for: " + username);
     }
 

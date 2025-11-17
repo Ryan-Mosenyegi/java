@@ -25,9 +25,6 @@ public class CustomerLoginController {
 
     private final Bank bank = Bank.getInstance();
 
-    /**
-     * Handles customer login validation and scene transition to the dashboard.
-     */
     @FXML
     protected void onLogin(ActionEvent event) throws Exception {
         String id = customerIdField.getText().trim();
@@ -53,9 +50,7 @@ public class CustomerLoginController {
         stage.show();
     }
 
-    /**
-     * Navigates back to the welcome screen.
-     */
+
     @FXML
     protected void onBack(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("WelcomeScreen.fxml"));
@@ -65,9 +60,6 @@ public class CustomerLoginController {
         stage.show();
     }
 
-    /**
-     * Opens the customer registration screen.
-     */
     @FXML
     protected void onRegister(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("customer-register.fxml"));

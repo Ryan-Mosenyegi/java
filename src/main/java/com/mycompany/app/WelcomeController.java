@@ -12,7 +12,7 @@ public class WelcomeController {
     @FXML
     protected void onCustomer() {
         try {
-            // Use correct lowercase file name and leading slash
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/mycompany/app/customer-login.fxml"));
             Scene scene = new Scene(loader.load(), 600, 400);
 
@@ -23,14 +23,13 @@ public class WelcomeController {
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("❌ Could not load customer-login.fxml");
+            System.out.println(" Could not load customer-login.fxml");
         }
     }
 
     @FXML
     protected void onClerk() {
         try {
-            // Use correct lowercase file name and leading slash
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/mycompany/app/admin-login.fxml"));
             Scene scene = new Scene(loader.load(), 700, 500);
 
@@ -41,7 +40,7 @@ public class WelcomeController {
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("❌ Could not load admin-login.fxml");
+            System.out.println("Could not load admin-login.fxml");
         }
     }
 }

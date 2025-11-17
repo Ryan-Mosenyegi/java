@@ -29,7 +29,6 @@ public class AdminLoginController {
             return;
         }
 
-        // TODO: Replace this with your own staff authentication logic
         if (username.equals("admin") && password.equals("1234")) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/mycompany/app/admin-dashboard.fxml"));
             Scene scene = new Scene(loader.load(), 700, 500);
