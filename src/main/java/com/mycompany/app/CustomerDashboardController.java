@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -22,6 +23,7 @@ public class CustomerDashboardController {
 
     @FXML
     public void initialize() {
+
         current = SessionManager.getCurrentCustomer();
 
         if (current != null) {
@@ -31,18 +33,23 @@ public class CustomerDashboardController {
         }
 
         accountTypeCombo.getItems().addAll("Savings", "Cheque", "Investment");
+
         refreshAccountsList();
     }
 
+    /* ---------------------------------------------------------
+                      LOAD ACCOUNTS
+    --------------------------------------------------------- */
     private void refreshAccountsList() {
+
         ObservableList<String> items = FXCollections.observableArrayList();
 
         if (current != null) {
             for (Account a : current.getAccounts()) {
                 items.add(
-                        a.getAccountNumber() + " - "
-                                + a.getClass().getSimpleName()
-                                + " - Balance: " + String.format("%.2f", a.getBalance())
+                        a.getAccountNumber() + " - " +
+                                a.getClass().getSimpleName() + " - Balance: " +
+                                String.format("%.2f", a.getBalance())
                 );
             }
         }
@@ -50,9 +57,12 @@ public class CustomerDashboardController {
         accountsList.setItems(items);
     }
 
-
+    /* ---------------------------------------------------------
+                       CREATE ACCOUNT
+    --------------------------------------------------------- */
     @FXML
     protected void onCreateAccount() {
+
         String type = accountTypeCombo.getValue();
 
         if (type == null) {
@@ -70,13 +80,17 @@ public class CustomerDashboardController {
         }
     }
 
-
+    /* ---------------------------------------------------------
+                        DEPOSIT
+    --------------------------------------------------------- */
     @FXML
     protected void onDeposit() {
+
         Account acc = getSelectedAccount();
         if (acc == null) return;
 
         double amount;
+
         try {
             amount = Double.parseDouble(amountField.getText());
         } catch (NumberFormatException e) {
@@ -91,13 +105,17 @@ public class CustomerDashboardController {
         refreshAccountsList();
     }
 
-
+    /* ---------------------------------------------------------
+                        WITHDRAW
+    --------------------------------------------------------- */
     @FXML
     protected void onWithdraw() {
+
         Account acc = getSelectedAccount();
         if (acc == null) return;
 
         double amount;
+
         try {
             amount = Double.parseDouble(amountField.getText());
         } catch (NumberFormatException e) {
@@ -116,17 +134,22 @@ public class CustomerDashboardController {
         }
     }
 
-
+    /* ---------------------------------------------------------
+                        LOGOUT
+    --------------------------------------------------------- */
     @FXML
     protected void onLogout() {
         try {
             SessionManager.clear();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("WelcomeScreen.fxml"));
-            Scene scene = new Scene(loader.load());
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/mycompany/app/WelcomeScreen.fxml")
+            );
+
+            Parent root = loader.load();
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
 
-            stage.setScene(new Scene(loader.load(), 600, 400));
+            stage.setScene(new Scene(root, 600, 400));
             stage.setTitle("Bank System - Home");
             stage.show();
 
@@ -136,8 +159,11 @@ public class CustomerDashboardController {
         }
     }
 
-
+    /* ---------------------------------------------------------
+                       HELPER
+    --------------------------------------------------------- */
     private Account getSelectedAccount() {
+
         String sel = accountsList.getSelectionModel().getSelectedItem();
 
         if (sel == null) {

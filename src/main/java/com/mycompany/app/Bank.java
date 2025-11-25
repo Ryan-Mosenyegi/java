@@ -65,7 +65,6 @@ public class Bank {
     }
 
     public boolean createAdmin(String name, String username, String password) {
-
         // Prevent duplicate usernames
         for (Admin a : admins) {
             if (a.getUsername().equals(username)) {
@@ -113,6 +112,42 @@ public class Bank {
             if (a.getAccountNumber().equals(accNo)) return a;
         }
         return null;
+    }
+
+    // ----------------------------
+    // DELETE CUSTOMER
+    // ----------------------------
+    public boolean deleteCustomer(String customerId) {
+        Customer c = findCustomerById(customerId);
+        if (c == null) return false;
+
+        // Remove all accounts of this customer
+        accounts.removeIf(a -> a.getCustomerId().equals(customerId));
+        // Remove customer
+        customers.remove(c);
+
+        save(); // Persist changes
+        return true;
+    }
+
+    // ----------------------------
+    // DELETE ACCOUNT
+    // ----------------------------
+    public boolean deleteAccount(String accountNumber) {
+        Account acc = findAccount(accountNumber);
+        if (acc == null) return false;
+
+        // Remove from global accounts list
+        accounts.remove(acc);
+
+        // Remove from customer's account list
+        Customer c = findCustomerById(acc.getCustomerId());
+        if (c != null) {
+            c.getAccounts().removeIf(a -> a.getAccountNumber().equals(accountNumber));
+        }
+
+        save(); // Persist changes
+        return true;
     }
 
     private void saveAdmins() {

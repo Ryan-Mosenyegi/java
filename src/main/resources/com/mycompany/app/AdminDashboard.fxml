@@ -13,22 +13,34 @@
 
     <center>
         <VBox spacing="12">
+            <!-- Customers -->
             <Label text="All Customers"/>
             <ListView fx:id="customersList" prefHeight="150"/>
 
+            <!-- Search + Delete Customer -->
             <HBox spacing="10">
                 <TextField fx:id="searchField" promptText="Search..."/>
                 <Button text="Search" onAction="#onSearch"/>
+                <Button text="Delete Customer" onAction="#onDeleteCustomer"/>
             </HBox>
 
+            <!-- Accounts -->
             <Label text="All Accounts"/>
             <ListView fx:id="allAccountsList" prefHeight="200"/>
 
-            <Button text="Apply Interest to All" onAction="#onApplyInterestAll"/>
+            <!-- Delete Account + Apply Interest -->
+            <HBox spacing="10">
+                <Button text="Delete Account" onAction="#onDeleteAccount"/>
+                <Button text="Apply Interest to All" onAction="#onApplyInterestAll"/>
+            </HBox>
 
+            <!-- Back button -->
             <Button text="Back" onAction="#onBack" prefWidth="120"/>
 
-            <Label fx:id="messageLabel"/>
+            <Label fx:id="messageLabel"
+                   GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.columnSpan="2"
+                   style="-fx-text-fill:red;"/>
         </VBox>
     </center>
+
 </BorderPane>

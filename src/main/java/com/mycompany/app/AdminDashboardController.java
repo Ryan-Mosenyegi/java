@@ -23,6 +23,7 @@ public class AdminDashboardController {
     public void initialize() {
         refresh();
 
+        // When selecting a customer, show only their accounts
         customersList.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
             if (newV != null) {
                 filterAccountsForSelectedCustomer(newV);
@@ -46,48 +47,26 @@ public class AdminDashboardController {
     private void loadAccounts(Iterable<Account> list) {
         ObservableList<String> items = FXCollections.observableArrayList();
         for (Account a : list) {
-            items.add(
-                    a.getAccountNumber() + " - " +
-                            a.getClass().getSimpleName() +
-                            " - Balance: " + String.format("%.2f", a.getBalance())
-            );
+            items.add(a.getAccountNumber() + " - " +
+                    a.getClass().getSimpleName() +
+                    " - Balance: " + String.format("%.2f", a.getBalance()));
         }
         allAccountsList.setItems(items);
     }
 
-
     private void filterAccountsForSelectedCustomer(String selected) {
         String customerId = selected.split(" - ")[0];
-
         ObservableList<String> filtered = FXCollections.observableArrayList();
 
         for (Account a : bank.getAccounts()) {
             if (a.getCustomerId().equals(customerId)) {
-                filtered.add(
-                        a.getAccountNumber() + " - " +
-                                a.getClass().getSimpleName() +
-                                " - Balance: " + String.format("%.2f", a.getBalance())
-                );
+                filtered.add(a.getAccountNumber() + " - " +
+                        a.getClass().getSimpleName() +
+                        " - Balance: " + String.format("%.2f", a.getBalance()));
             }
         }
 
         allAccountsList.setItems(filtered);
-    }
-
-    @FXML
-    protected void onApplyInterestAll() {
-        int count = 0;
-
-        for (Account a : bank.getAccounts()) {
-            if (a instanceof MonthlyInterest i) {
-                i.applyMonthlyInterest();
-                count++;
-            }
-        }
-
-        bank.save();
-        messageLabel.setText("Interest applied to " + count + " accounts.");
-        refresh();
     }
 
     @FXML
@@ -103,6 +82,54 @@ public class AdminDashboardController {
         }
 
         loadCustomers(filtered);
+    }
+
+    @FXML
+    protected void onApplyInterestAll() {
+        int count = 0;
+        for (Account a : bank.getAccounts()) {
+            if (a instanceof MonthlyInterest i) {
+                i.applyMonthlyInterest();
+                count++;
+            }
+        }
+        bank.save();
+        messageLabel.setText("Interest applied to " + count + " accounts.");
+        refresh();
+    }
+
+    @FXML
+    protected void onDeleteCustomer() {
+        String selected = customersList.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            messageLabel.setText("Select a customer to delete.");
+            return;
+        }
+
+        String customerId = selected.split(" - ")[0];
+        if (bank.deleteCustomer(customerId)) {
+            messageLabel.setText("Customer deleted successfully.");
+        } else {
+            messageLabel.setText("Failed to delete customer.");
+        }
+        refresh();
+    }
+
+    @FXML
+    protected void onDeleteAccount() {
+        String selected = allAccountsList.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            messageLabel.setText("Select an account to delete.");
+            return;
+        }
+
+        String accNo = selected.split(" - ")[0];
+        if (bank.deleteAccount(accNo)) {
+            messageLabel.setText("Account deleted successfully.");
+        } else {
+            messageLabel.setText("Failed to delete account.");
+        }
+        refresh();
     }
 
     @FXML
