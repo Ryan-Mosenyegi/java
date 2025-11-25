@@ -23,19 +23,12 @@ public class AdminDashboardController {
     public void initialize() {
         refresh();
 
-        // -------------------------------
-        // When user clicks a customer → filter accounts
-        // -------------------------------
         customersList.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
             if (newV != null) {
                 filterAccountsForSelectedCustomer(newV);
             }
         });
     }
-
-    /* ---------------------------------------------------------------------------
-       LOAD CUSTOMERS + ACCOUNTS
-       --------------------------------------------------------------------------- */
 
     private void refresh() {
         loadCustomers(bank.getCustomers());
@@ -62,12 +55,8 @@ public class AdminDashboardController {
         allAccountsList.setItems(items);
     }
 
-    /* ---------------------------------------------------------------------------
-       FILTER ACCOUNTS FOR SELECTED CUSTOMER
-       --------------------------------------------------------------------------- */
 
     private void filterAccountsForSelectedCustomer(String selected) {
-        // selected format: "C001 - John Doe"
         String customerId = selected.split(" - ")[0];
 
         ObservableList<String> filtered = FXCollections.observableArrayList();
@@ -84,10 +73,6 @@ public class AdminDashboardController {
 
         allAccountsList.setItems(filtered);
     }
-
-    /* ---------------------------------------------------------------------------
-       ADMIN ACTIONS
-       --------------------------------------------------------------------------- */
 
     @FXML
     protected void onApplyInterestAll() {

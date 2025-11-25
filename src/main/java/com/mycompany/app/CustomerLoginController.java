@@ -34,8 +34,8 @@ public class CustomerLoginController {
 
         SessionManager.setCurrentCustomer(c);
 
-        // ✅ FIXED FXML PATH
-        Parent root = FXMLLoader.load(getClass().getResource("/com/mycompany/app/CustomerDashboard.fxml"));
+
+        Parent root = FXMLLoader.load(getClass().getResource("CustomerDashboard.fxml"));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root, 700, 500));
         stage.show();
@@ -43,7 +43,7 @@ public class CustomerLoginController {
 
     @FXML
     protected void onBack(ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/mycompany/app/WelcomeScreen.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("WelcomeScreen.fxml"));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root, 600, 400));
         stage.show();

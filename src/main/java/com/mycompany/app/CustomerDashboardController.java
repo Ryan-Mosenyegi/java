@@ -50,7 +50,7 @@ public class CustomerDashboardController {
         accountsList.setItems(items);
     }
 
-    // ----------------------------- CREATE ACCOUNT -----------------------------
+
     @FXML
     protected void onCreateAccount() {
         String type = accountTypeCombo.getValue();
@@ -70,7 +70,7 @@ public class CustomerDashboardController {
         }
     }
 
-    // ----------------------------- DEPOSIT -----------------------------------
+
     @FXML
     protected void onDeposit() {
         Account acc = getSelectedAccount();
@@ -91,7 +91,7 @@ public class CustomerDashboardController {
         refreshAccountsList();
     }
 
-    // ----------------------------- WITHDRAW ----------------------------------
+
     @FXML
     protected void onWithdraw() {
         Account acc = getSelectedAccount();
@@ -116,7 +116,7 @@ public class CustomerDashboardController {
         }
     }
 
-    // ----------------------------- LOGOUT -------------------------------------
+
     @FXML
     protected void onLogout() {
         try {
@@ -136,7 +136,7 @@ public class CustomerDashboardController {
         }
     }
 
-    // ----------------------------- HELPER METHODS -----------------------------
+
     private Account getSelectedAccount() {
         String sel = accountsList.getSelectionModel().getSelectedItem();
 

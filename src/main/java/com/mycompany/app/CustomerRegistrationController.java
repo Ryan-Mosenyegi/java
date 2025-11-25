@@ -34,9 +34,6 @@ public class CustomerRegistrationController {
             return;
         }
 
-        // ------------------------------
-        // AUTO-GENERATED UNIQUE CUSTOMER ID
-        // ------------------------------
         String id = generateId();
 
         // Create the customer
@@ -46,9 +43,6 @@ public class CustomerRegistrationController {
         messageLabel.setText("✔ Registration successful! Your ID: " + id);
     }
 
-    // ------------------------------
-    // UNIQUE ID GENERATOR
-    // ------------------------------
     private String generateId() {
         int max = 1000;  // starting point
 
