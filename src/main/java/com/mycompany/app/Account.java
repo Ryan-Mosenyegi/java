@@ -1,10 +1,11 @@
 package com.mycompany.app;
 
 public abstract class Account {
+
     private String accountNumber;
+    private String customerId;
     private double balance;
-    private String password; // Customer transaction password
-    private String customerId; // Links account to customer login
+    private String password;
 
     public Account(String accountNumber, String customerId, String password) {
         this.accountNumber = accountNumber;
@@ -13,25 +14,15 @@ public abstract class Account {
         this.balance = 0.0;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
+    public String getAccountNumber() { return accountNumber; }
+    public String getCustomerId() { return customerId; }
+    public double getBalance() { return balance; }
+    public String getPassword() { return password; }
 
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
+    public void setBalance(double b) { this.balance = b; }
 
     public void deposit(double amount) {
-        if (amount > 0)
-            balance += amount;
+        if (amount > 0) balance += amount;
     }
 
     protected void reduceBalance(double amount) {

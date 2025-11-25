@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.app.AdminDashboardController">
+
+    <top>
+        <HBox spacing="10">
+            <Label text="Admin Dashboard" style="-fx-font-size:16; -fx-font-weight:bold;"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="12">
+            <Label text="All Customers"/>
+            <ListView fx:id="customersList" prefHeight="150"/>
+
+            <HBox spacing="10">
+                <TextField fx:id="searchField" promptText="Search..."/>
+                <Button text="Search" onAction="#onSearch"/>
+            </HBox>
+
+            <Label text="All Accounts"/>
+            <ListView fx:id="allAccountsList" prefHeight="200"/>
+
+            <Button text="Apply Interest to All" onAction="#onApplyInterestAll"/>
+
+            <Button text="Back" onAction="#onBack" prefWidth="120"/>
+
+            <Label fx:id="messageLabel"/>
+        </VBox>
+    </center>
+</BorderPane>

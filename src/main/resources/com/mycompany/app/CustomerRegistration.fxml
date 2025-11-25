@@ -7,7 +7,7 @@
 <GridPane alignment="CENTER"
           xmlns="http://javafx.com/javafx/17.0.12"
           xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.mycompany.app.CustomerRegisterController"
+          fx:controller="com.mycompany.app.CustomerRegistrationController"
           hgap="10" vgap="10">
 
     <padding>

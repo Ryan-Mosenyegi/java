@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.app.CustomerDashboardController">
+
+
+    <top>
+        <HBox spacing="10">
+            <Label text="Customer Dashboard" style="-fx-font-size:16; -fx-font-weight:bold;"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="10">
+            <Label fx:id="welcomeLabel"/>
+            <ListView fx:id="accountsList" prefHeight="150"/>
+
+            <GridPane hgap="8" vgap="8">
+                <Label text="Create Account:" GridPane.rowIndex="0"/>
+                <ComboBox fx:id="accountTypeCombo" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Button text="Create" onAction="#onCreateAccount"
+                        GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+
+                <Label text="Amount:" GridPane.rowIndex="1"/>
+                <TextField fx:id="amountField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Button text="Deposit" onAction="#onDeposit"
+                        GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Button text="Withdraw" onAction="#onWithdraw"
+                        GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+
+                <Button text="Logout" onAction="#onLogout"
+                        GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+ </GridPane>
+
+            <Label fx:id="messageLabel"/>
+        </VBox>
+    </center>
+</BorderPane>

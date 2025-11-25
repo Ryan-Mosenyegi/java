@@ -2,65 +2,128 @@ package com.mycompany.app;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class AdminDashboardController {
+
     @FXML private ListView<String> customersList;
     @FXML private ListView<String> allAccountsList;
+    @FXML private TextField searchField;
     @FXML private Label messageLabel;
 
-    private Bank bank = Bank.getInstance();
+    private final Bank bank = Bank.getInstance();
 
     @FXML
     public void initialize() {
         refresh();
+
+        // -------------------------------
+        // When user clicks a customer → filter accounts
+        // -------------------------------
+        customersList.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
+            if (newV != null) {
+                filterAccountsForSelectedCustomer(newV);
+            }
+        });
     }
+
+    /* ---------------------------------------------------------------------------
+       LOAD CUSTOMERS + ACCOUNTS
+       --------------------------------------------------------------------------- */
 
     private void refresh() {
-        ObservableList<String> custItems = FXCollections.observableArrayList();
-        for (Customer c : bank.getCustomers()) {
-            custItems.add(c.getCustomerId() + " - " + c.getFullName());
-        }
-        customersList.setItems(custItems);
-
-        ObservableList<String> acctItems = FXCollections.observableArrayList();
-        for (Account a : bank.getAllAccounts()) {
-            acctItems.add(a.getAccountNumber() + " - " + a.getClass().getSimpleName() + " - Balance: " + String.format("%.2f", a.getBalance()));
-        }
-        allAccountsList.setItems(acctItems);
+        loadCustomers(bank.getCustomers());
+        loadAccounts(bank.getAccounts());
     }
+
+    private void loadCustomers(Iterable<Customer> list) {
+        ObservableList<String> items = FXCollections.observableArrayList();
+        for (Customer c : list) {
+            items.add(c.getCustomerId() + " - " + c.getFullName());
+        }
+        customersList.setItems(items);
+    }
+
+    private void loadAccounts(Iterable<Account> list) {
+        ObservableList<String> items = FXCollections.observableArrayList();
+        for (Account a : list) {
+            items.add(
+                    a.getAccountNumber() + " - " +
+                            a.getClass().getSimpleName() +
+                            " - Balance: " + String.format("%.2f", a.getBalance())
+            );
+        }
+        allAccountsList.setItems(items);
+    }
+
+    /* ---------------------------------------------------------------------------
+       FILTER ACCOUNTS FOR SELECTED CUSTOMER
+       --------------------------------------------------------------------------- */
+
+    private void filterAccountsForSelectedCustomer(String selected) {
+        // selected format: "C001 - John Doe"
+        String customerId = selected.split(" - ")[0];
+
+        ObservableList<String> filtered = FXCollections.observableArrayList();
+
+        for (Account a : bank.getAccounts()) {
+            if (a.getCustomerId().equals(customerId)) {
+                filtered.add(
+                        a.getAccountNumber() + " - " +
+                                a.getClass().getSimpleName() +
+                                " - Balance: " + String.format("%.2f", a.getBalance())
+                );
+            }
+        }
+
+        allAccountsList.setItems(filtered);
+    }
+
+    /* ---------------------------------------------------------------------------
+       ADMIN ACTIONS
+       --------------------------------------------------------------------------- */
 
     @FXML
     protected void onApplyInterestAll() {
         int count = 0;
-        for (Account a : bank.getAllAccounts()) {
-            if (a instanceof ApplyInterest ai) {
-                ai.applyMonthlyInterest();
+
+        for (Account a : bank.getAccounts()) {
+            if (a instanceof MonthlyInterest i) {
+                i.applyMonthlyInterest();
                 count++;
             }
         }
-        messageLabel.setText("Applied interest to " + count + " accounts.");
+
+        bank.save();
+        messageLabel.setText("Interest applied to " + count + " accounts.");
         refresh();
     }
 
+    @FXML
+    protected void onSearch() {
+        String q = searchField.getText().toLowerCase();
+        ObservableList<Customer> filtered = FXCollections.observableArrayList();
 
+        for (Customer c : bank.getCustomers()) {
+            if (c.getFullName().toLowerCase().contains(q) ||
+                    c.getCustomerId().toLowerCase().contains(q)) {
+                filtered.add(c);
+            }
+        }
+
+        loadCustomers(filtered);
+    }
 
     @FXML
-    public void onBack(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("WelcomeScreen.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Banking System - Home");
-        stage.show();
+    protected void onBack() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("WelcomeScreen.fxml"));
+        Stage stage = (Stage) customersList.getScene().getWindow();
+        stage.setScene(new Scene(loader.load(), 600, 400));
     }
 }

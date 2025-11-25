@@ -10,11 +10,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class CustomerDashboardController {
+
     @FXML private Label welcomeLabel;
     @FXML private ListView<String> accountsList;
     @FXML private ComboBox<String> accountTypeCombo;
     @FXML private TextField amountField;
-    @FXML private PasswordField acctPasswordField;
     @FXML private Label messageLabel;
 
     private final Bank bank = Bank.getInstance();
@@ -23,45 +23,58 @@ public class CustomerDashboardController {
     @FXML
     public void initialize() {
         current = SessionManager.getCurrentCustomer();
+
         if (current != null) {
             welcomeLabel.setText("Welcome, " + current.getFullName() + " (ID: " + current.getCustomerId() + ")");
+        } else {
+            welcomeLabel.setText("Welcome, Guest");
         }
-        accountTypeCombo.getItems().addAll("Cheque", "Savings", "Investment");
+
+        accountTypeCombo.getItems().addAll("Savings", "Cheque", "Investment");
         refreshAccountsList();
     }
 
     private void refreshAccountsList() {
         ObservableList<String> items = FXCollections.observableArrayList();
+
         if (current != null) {
             for (Account a : current.getAccounts()) {
-                items.add(a.getAccountNumber() + " - " + a.getClass().getSimpleName()
-                        + " - Balance: " + String.format("%.2f", a.getBalance()));
+                items.add(
+                        a.getAccountNumber() + " - "
+                                + a.getClass().getSimpleName()
+                                + " - Balance: " + String.format("%.2f", a.getBalance())
+                );
             }
         }
+
         accountsList.setItems(items);
     }
 
+    // ----------------------------- CREATE ACCOUNT -----------------------------
     @FXML
     protected void onCreateAccount() {
         String type = accountTypeCombo.getValue();
+
         if (type == null) {
             messageLabel.setText("Select account type.");
             return;
         }
+
         Account acc = bank.createAccount(current, type);
+
         if (acc != null) {
-            messageLabel.setText("Created " + acc.getAccountNumber());
+            messageLabel.setText("Created account: " + acc.getAccountNumber());
             refreshAccountsList();
         } else {
-            messageLabel.setText("Failed to create account.");
+            messageLabel.setText("Account creation failed.");
         }
     }
 
+    // ----------------------------- DEPOSIT -----------------------------------
     @FXML
     protected void onDeposit() {
         Account acc = getSelectedAccount();
         if (acc == null) return;
-        if (!verifyPassword(acc)) return;
 
         double amount;
         try {
@@ -72,15 +85,17 @@ public class CustomerDashboardController {
         }
 
         acc.deposit(amount);
-        messageLabel.setText("Deposit successful. New balance: " + String.format("%.2f", acc.getBalance()));
+        bank.save();
+
+        messageLabel.setText("Deposit successful. New balance: " + acc.getBalance());
         refreshAccountsList();
     }
 
+    // ----------------------------- WITHDRAW ----------------------------------
     @FXML
     protected void onWithdraw() {
         Account acc = getSelectedAccount();
         if (acc == null) return;
-        if (!verifyPassword(acc)) return;
 
         double amount;
         try {
@@ -90,46 +105,47 @@ public class CustomerDashboardController {
             return;
         }
 
-        if (acc instanceof Withdrawable) {
-            ((Withdrawable) acc).withdraw(amount);
-            messageLabel.setText("Withdraw successful. New balance: " + String.format("%.2f", acc.getBalance()));
+        if (acc instanceof Withdrawable w) {
+            w.withdraw(amount);
+            bank.save();
+
+            messageLabel.setText("Withdraw successful. New balance: " + acc.getBalance());
             refreshAccountsList();
         } else {
-            messageLabel.setText("This account does not allow withdrawal.");
+            messageLabel.setText("This account does not support withdrawals.");
         }
     }
 
+    // ----------------------------- LOGOUT -------------------------------------
     @FXML
-    protected void onBack() {
+    protected void onLogout() {
         try {
             SessionManager.clear();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("customer-login.fxml"));
-            Scene scene = new Scene(loader.load(), 600, 400);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("WelcomeScreen.fxml"));
+            Scene scene = new Scene(loader.load());
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-            stage.setScene(scene);
-            stage.setTitle("Customer Login");
+
+            stage.setScene(new Scene(loader.load(), 600, 400));
+            stage.setTitle("Bank System - Home");
+            stage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
-            messageLabel.setText("Error returning to login.");
+            messageLabel.setText("Error returning to home screen.");
         }
     }
 
+    // ----------------------------- HELPER METHODS -----------------------------
     private Account getSelectedAccount() {
         String sel = accountsList.getSelectionModel().getSelectedItem();
+
         if (sel == null) {
             messageLabel.setText("Select an account.");
             return null;
         }
+
         String accNo = sel.split(" - ")[0];
         return bank.findAccount(accNo);
-    }
-
-    private boolean verifyPassword(Account acc) {
-        String pwd = acctPasswordField.getText();
-        if (!acc.getPassword().equals(pwd)) {
-            messageLabel.setText("Incorrect account password.");
-            return false;
-        }
-        return true;
     }
 }
