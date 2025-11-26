@@ -4,10 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class CustomerDashboardController {
@@ -15,7 +15,10 @@ public class CustomerDashboardController {
     @FXML private Label welcomeLabel;
     @FXML private ListView<String> accountsList;
     @FXML private ComboBox<String> accountTypeCombo;
+
+    // Used for BOTH initial deposit & normal deposit/withdraw
     @FXML private TextField amountField;
+
     @FXML private Label messageLabel;
 
     private final Bank bank = Bank.getInstance();
@@ -27,7 +30,10 @@ public class CustomerDashboardController {
         current = SessionManager.getCurrentCustomer();
 
         if (current != null) {
-            welcomeLabel.setText("Welcome, " + current.getFullName() + " (ID: " + current.getCustomerId() + ")");
+            welcomeLabel.setText(
+                    "Welcome, " + current.getFullName() +
+                            " (ID: " + current.getCustomerId() + ")"
+            );
         } else {
             welcomeLabel.setText("Welcome, Guest");
         }
@@ -38,7 +44,7 @@ public class CustomerDashboardController {
     }
 
     /* ---------------------------------------------------------
-                      LOAD ACCOUNTS
+                       LOAD ACCOUNTS
     --------------------------------------------------------- */
     private void refreshAccountsList() {
 
@@ -70,10 +76,34 @@ public class CustomerDashboardController {
             return;
         }
 
-        Account acc = bank.createAccount(current, type);
+        double initialDeposit = 0;
+
+        // Investment account requires initial deposit
+        if (type.equals("Investment")) {
+
+            try {
+                initialDeposit = Double.parseDouble(amountField.getText());
+            } catch (Exception e) {
+                messageLabel.setText("Enter valid initial deposit for Investment.");
+                return;
+            }
+
+            if (initialDeposit < 500) {
+                messageLabel.setText("❌ Investment requires MINIMUM P500.");
+                return;
+            }
+        }
+
+        // Cheque account requires employment
+        if (type.equals("Cheque") && !current.isEmployed()) {
+            messageLabel.setText("❌ Only employed customers can create a Cheque account.");
+            return;
+        }
+
+        Account acc = bank.createAccount(current, type, initialDeposit);
 
         if (acc != null) {
-            messageLabel.setText("Created account: " + acc.getAccountNumber());
+            messageLabel.setText(type + " account created: " + acc.getAccountNumber());
             refreshAccountsList();
         } else {
             messageLabel.setText("Account creation failed.");
@@ -98,10 +128,15 @@ public class CustomerDashboardController {
             return;
         }
 
+        if (amount <= 0) {
+            messageLabel.setText("Amount must be positive.");
+            return;
+        }
+
         acc.deposit(amount);
         bank.save();
 
-        messageLabel.setText("Deposit successful. New balance: " + acc.getBalance());
+        messageLabel.setText("Deposit successful. Balance: " + acc.getBalance());
         refreshAccountsList();
     }
 
@@ -123,12 +158,30 @@ public class CustomerDashboardController {
             return;
         }
 
-        if (acc instanceof Withdrawable w) {
-            w.withdraw(amount);
-            bank.save();
+        if (amount <= 0) {
+            messageLabel.setText("Amount must be positive.");
+            return;
+        }
 
-            messageLabel.setText("Withdraw successful. New balance: " + acc.getBalance());
+        // Savings rule: cannot withdraw
+        if (acc instanceof SavingsAccount) {
+            messageLabel.setText("❌ Savings Accounts CANNOT withdraw.");
+            return;
+        }
+
+        if (acc instanceof Withdrawable w) {
+
+            boolean ok = w.withdraw(amount);
+
+            if (!ok) {
+                messageLabel.setText("❌ Insufficient funds.");
+                return;
+            }
+
+            bank.save();
+            messageLabel.setText("Withdraw successful. Balance: " + acc.getBalance());
             refreshAccountsList();
+
         } else {
             messageLabel.setText("This account does not support withdrawals.");
         }
@@ -146,10 +199,8 @@ public class CustomerDashboardController {
                     getClass().getResource("/com/mycompany/app/WelcomeScreen.fxml")
             );
 
-            Parent root = loader.load();
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-
-            stage.setScene(new Scene(root, 600, 400));
+            stage.setScene(new Scene(loader.load(), 600, 400));
             stage.setTitle("Bank System - Home");
             stage.show();
 
@@ -160,7 +211,7 @@ public class CustomerDashboardController {
     }
 
     /* ---------------------------------------------------------
-                       HELPER
+                        HELPERS
     --------------------------------------------------------- */
     private Account getSelectedAccount() {
 

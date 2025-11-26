@@ -1,21 +1,15 @@
 package com.mycompany.app;
 
-public class SavingsAccount extends Account implements Withdrawable, MonthlyInterest {
+public class SavingsAccount extends Account implements MonthlyInterest {
 
     public SavingsAccount(String accNo, String customerId, String password) {
         super(accNo, customerId, password);
     }
 
-    @Override
-    public void withdraw(double amount) {
-        if (amount > 0 && getBalance() >= amount) {
-            reduceBalance(amount);
-        }
-    }
-
+    // Savings accounts CANNOT withdraw. Logic handled in CustomerDashboardController.
     @Override
     public void applyMonthlyInterest() {
-        double rate = 0.005;
+        double rate = 0.005; // 0.5% monthly interest
         deposit(getBalance() * rate);
     }
 

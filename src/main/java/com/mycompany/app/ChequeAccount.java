@@ -7,10 +7,12 @@ public class ChequeAccount extends Account implements Withdrawable {
     }
 
     @Override
-    public void withdraw(double amount) {
+    public boolean withdraw(double amount) {
         if (amount > 0 && getBalance() >= amount) {
             reduceBalance(amount);
+            return true;
         }
+        return false;
     }
 
     @Override

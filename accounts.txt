@@ -1,6 +1,6 @@
-A1000,C1001,120.86772470847744,pass123,SavingsAccount
-A1001,C1001,0.0,pass123,ChequeAccount
-A1002,C1001,0.0,pass123,InvestmentAccount
-A1003,C1002,0.0,pass123,SavingsAccount
-A1004,C1002,0.0,pass123,ChequeAccount
-A1005,C1002,0.0,pass123,InvestmentAccount
+A1000,C1002,200.0,pass123,SavingsAccount
+A1001,C1001,200.0,pass123,SavingsAccount
+A1002,C1001,500.0,pass123,InvestmentAccount
+A1003,C1002,100.0,pass123,ChequeAccount
+A1004,C1002,500.0,pass123,InvestmentAccount
+A1005,C1002,50.0,pass123,SavingsAccount

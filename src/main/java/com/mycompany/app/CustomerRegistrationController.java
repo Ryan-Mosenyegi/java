@@ -16,6 +16,7 @@ public class CustomerRegistrationController {
     @FXML private TextField firstNameField;
     @FXML private TextField lastNameField;
     @FXML private TextField addressField;
+    @FXML private TextField employerField;
     @FXML private PasswordField passwordField;
     @FXML private Label messageLabel;
 
@@ -27,6 +28,7 @@ public class CustomerRegistrationController {
         String first = firstNameField.getText().trim();
         String last = lastNameField.getText().trim();
         String address = addressField.getText().trim();
+        String employerInput = employerField.getText().trim();
         String pass = passwordField.getText().trim();
 
         if (first.isEmpty() || last.isEmpty() || address.isEmpty() || pass.isEmpty()) {
@@ -34,10 +36,13 @@ public class CustomerRegistrationController {
             return;
         }
 
+        // Determine employment status
+        boolean employed = !employerInput.isEmpty(); // employed if they typed employer name
+
         String id = generateId();
 
         // Create the customer
-        bank.createCustomer(id, first + " " + last, pass);
+        bank.createCustomer(id, first + " " + last, employed, employerInput, pass);
 
         messageLabel.setStyle("-fx-text-fill: green;");
         messageLabel.setText("✔ Registration successful! Your ID: " + id);

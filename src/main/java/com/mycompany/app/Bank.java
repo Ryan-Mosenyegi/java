@@ -1,6 +1,5 @@
 package com.mycompany.app;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,22 +7,16 @@ public class Bank {
 
     private static Bank instance;
 
-    private List<Customer> customers = new ArrayList<>();
-    private List<Account> accounts = new ArrayList<>();
-    private List<Admin> admins = new ArrayList<>();
+    private final List<Customer> customers = new ArrayList<>();
+    private final List<Account> accounts = new ArrayList<>();
+    private final List<Admin> admins = new ArrayList<>();
 
-    private final String ADMIN_FILE = "admins.txt";
-
-    public Bank() {
-        loadAdmins();  // Load admins from admins.txt
-    }
-
+    public Bank() { }
     public Bank(boolean loading) { }
 
     public static Bank getInstance() {
         if (instance == null) {
             instance = FileDatabase.load();
-            instance.loadAdmins(); // Ensure admins load after FileDatabase
         }
         return instance;
     }
@@ -33,68 +26,51 @@ public class Bank {
     public List<Admin> getAdmins() { return admins; }
 
     public Customer findCustomerById(String id) {
-        for (Customer c : customers) {
-            if (c.getCustomerId().equals(id))
-                return c;
-        }
+        for (Customer c : customers) if (c.getCustomerId().equals(id)) return c;
         return null;
     }
 
-    public Customer createCustomer(String id, String fullName, String password) {
-        Customer c = new Customer(id, fullName, password);
+    public void createCustomer(String id, String fullName, boolean employed, String employer, String password) {
+        Customer c = new Customer(id, fullName, employed, employer, password);
         customers.add(c);
         save();
-        return c;
     }
 
     public Customer loginCustomer(String id, String pass) {
-        for (Customer c : customers) {
-            if (c.getCustomerId().equals(id) && c.getPassword().equals(pass))
-                return c;
-        }
-        return null;
-    }
-
-    public Admin findAdminByUsername(String username) {
-        for (Admin a : admins) {
-            if (a.getUsername().equals(username)) {
-                return a;
-            }
-        }
+        for (Customer c : customers)
+            if (c.getCustomerId().equals(id) && c.getPassword().equals(pass)) return c;
         return null;
     }
 
     public boolean createAdmin(String name, String username, String password) {
-        // Prevent duplicate usernames
-        for (Admin a : admins) {
-            if (a.getUsername().equals(username)) {
-                return false;
-            }
-        }
-
+        for (Admin a : admins) if (a.getUsername().equals(username)) return false;
         Admin a = new Admin(name, username, password);
         admins.add(a);
-        saveAdmins();
+        save();
         return true;
     }
 
     public Admin loginAdmin(String username, String password) {
-        for (Admin a : admins) {
-            if (a.getUsername().equals(username) &&
-                    a.getPassword().equals(password)) {
-                return a;
-            }
-        }
+        for (Admin a : admins)
+            if (a.getUsername().equals(username) && a.getPassword().equals(password)) return a;
         return null;
     }
 
-    public Account createAccount(Customer c, String type) {
+    /** -------------------- CREATE ACCOUNT -------------------- */
+    public Account createAccount(Customer c, String type, double initialDeposit) {
+
+        // Investment account requires minimum 500
+        if (type.equals("Investment") && initialDeposit < 500) return null;
+
+        // Cheque account requires employment
+        if (type.equals("Cheque") && !c.isEmployed()) return null;
+
         String accNo = "A" + (accounts.size() + 1000);
 
         Account acc = switch (type) {
             case "Savings" -> new SavingsAccount(accNo, c.getCustomerId(), "pass123");
             case "Cheque" -> new ChequeAccount(accNo, c.getCustomerId(), "pass123");
-            case "Investment" -> new InvestmentAccount(accNo, c.getCustomerId(), "pass123");
+            case "Investment" -> new InvestmentAccount(accNo, c.getCustomerId(), "pass123", initialDeposit);
             default -> null;
         };
 
@@ -108,81 +84,33 @@ public class Bank {
     }
 
     public Account findAccount(String accNo) {
-        for (Account a : accounts) {
-            if (a.getAccountNumber().equals(accNo)) return a;
-        }
+        for (Account a : accounts) if (a.getAccountNumber().equals(accNo)) return a;
         return null;
     }
 
-    // ----------------------------
-    // DELETE CUSTOMER
-    // ----------------------------
+    /** -------------------- DELETE -------------------- */
     public boolean deleteCustomer(String customerId) {
         Customer c = findCustomerById(customerId);
-        if (c == null) return false;
-
-        // Remove all accounts of this customer
-        accounts.removeIf(a -> a.getCustomerId().equals(customerId));
-        // Remove customer
-        customers.remove(c);
-
-        save(); // Persist changes
-        return true;
-    }
-
-    // ----------------------------
-    // DELETE ACCOUNT
-    // ----------------------------
-    public boolean deleteAccount(String accountNumber) {
-        Account acc = findAccount(accountNumber);
-        if (acc == null) return false;
-
-        // Remove from global accounts list
-        accounts.remove(acc);
-
-        // Remove from customer's account list
-        Customer c = findCustomerById(acc.getCustomerId());
         if (c != null) {
-            c.getAccounts().removeIf(a -> a.getAccountNumber().equals(accountNumber));
+            // Remove their accounts first
+            accounts.removeIf(a -> a.getCustomerId().equals(customerId));
+            return customers.remove(c);
         }
-
-        save(); // Persist changes
-        return true;
+        return false;
     }
 
-    private void saveAdmins() {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(ADMIN_FILE))) {
-            for (Admin a : admins) {
-                pw.println(a.getName() + "," + a.getUsername() + "," + a.getPassword());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public boolean deleteAccount(String accNo) {
+        Account a = findAccount(accNo);
+        if (a != null) {
+            Customer c = findCustomerById(a.getCustomerId());
+            if (c != null) c.getAccounts().remove(a);
+            return accounts.remove(a);
         }
+        return false;
     }
 
-    public void loadAdmins() {
-        admins.clear();
-
-        File file = new File(ADMIN_FILE);
-        if (!file.exists()) return;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                String[] p = line.split(",");
-                if (p.length == 3) {
-                    admins.add(new Admin(p[0], p[1], p[2]));
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    /** -------------------- SAVE -------------------- */
     public void save() {
         FileDatabase.save(this);
-        saveAdmins();
     }
 }

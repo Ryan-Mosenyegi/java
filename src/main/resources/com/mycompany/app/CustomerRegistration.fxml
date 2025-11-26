@@ -27,15 +27,18 @@
     <Label text="Address:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
     <TextField fx:id="addressField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-    <Label text="Password:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-    <PasswordField fx:id="passwordField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    <Label text="Employer (leave blank if unemployed):" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+    <TextField fx:id="employerField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-    <HBox spacing="10" alignment="CENTER_RIGHT" GridPane.rowIndex="5" GridPane.columnIndex="1">
+    <Label text="Password:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+    <PasswordField fx:id="passwordField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT" GridPane.rowIndex="6" GridPane.columnIndex="1">
         <Button text="Back" onAction="#onBack"/>
         <Button text="Register" onAction="#onRegister"/>
     </HBox>
 
     <Label fx:id="messageLabel"
-           GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.columnSpan="2"
+           GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.columnSpan="2"
            style="-fx-text-fill:red;"/>
 </GridPane>
