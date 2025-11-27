@@ -6,7 +6,6 @@ public class SavingsAccount extends Account implements MonthlyInterest {
         super(accNo, customerId, password);
     }
 
-    // Savings accounts CANNOT withdraw. Logic handled in CustomerDashboardController.
     @Override
     public void applyMonthlyInterest() {
         double rate = 0.005; // 0.5% monthly interest

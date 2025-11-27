@@ -56,10 +56,10 @@ public class Bank {
         return null;
     }
 
-    /** -------------------- CREATE ACCOUNT -------------------- */
+
     public Account createAccount(Customer c, String type, double initialDeposit) {
 
-        // Investment account requires minimum 500
+        // Investment account needs minimum 500
         if (type.equals("Investment") && initialDeposit < 500) return null;
 
         // Cheque account requires employment
@@ -88,7 +88,7 @@ public class Bank {
         return null;
     }
 
-    /** -------------------- DELETE -------------------- */
+
     public boolean deleteCustomer(String customerId) {
         Customer c = findCustomerById(customerId);
         if (c != null) {
@@ -109,7 +109,6 @@ public class Bank {
         return false;
     }
 
-    /** -------------------- SAVE -------------------- */
     public void save() {
         FileDatabase.save(this);
     }

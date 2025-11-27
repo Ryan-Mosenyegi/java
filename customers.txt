@@ -1,3 +1,2 @@
 C1001,ryan moss,false,,12345
 C1002,marulo seipone,true,Ronald pty ltd,11223
-C1003,karabo leetile,false,,customer123

@@ -8,7 +8,6 @@ public class FileDatabase {
     private static final String ACCOUNT_FILE = "accounts.txt";
     private static final String ADMIN_FILE = "admins.txt";
 
-    /** -------------------- SAVE -------------------- */
     public static void save(Bank bank) {
         saveCustomers(bank);
         saveAccounts(bank);

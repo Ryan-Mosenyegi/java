@@ -16,7 +16,7 @@ public class CustomerDashboardController {
     @FXML private ListView<String> accountsList;
     @FXML private ComboBox<String> accountTypeCombo;
 
-    // Used for BOTH initial deposit & normal deposit/withdraw
+
     @FXML private TextField amountField;
 
     @FXML private Label messageLabel;
@@ -43,9 +43,7 @@ public class CustomerDashboardController {
         refreshAccountsList();
     }
 
-    /* ---------------------------------------------------------
-                       LOAD ACCOUNTS
-    --------------------------------------------------------- */
+
     private void refreshAccountsList() {
 
         ObservableList<String> items = FXCollections.observableArrayList();
@@ -63,9 +61,7 @@ public class CustomerDashboardController {
         accountsList.setItems(items);
     }
 
-    /* ---------------------------------------------------------
-                       CREATE ACCOUNT
-    --------------------------------------------------------- */
+
     @FXML
     protected void onCreateAccount() {
 
@@ -89,14 +85,14 @@ public class CustomerDashboardController {
             }
 
             if (initialDeposit < 500) {
-                messageLabel.setText("❌ Investment requires MINIMUM P500.");
+                messageLabel.setText(" Investment requires MINIMUM P500.");
                 return;
             }
         }
 
         // Cheque account requires employment
         if (type.equals("Cheque") && !current.isEmployed()) {
-            messageLabel.setText("❌ Only employed customers can create a Cheque account.");
+            messageLabel.setText(" Only employed customers can create a Cheque account.");
             return;
         }
 
@@ -110,9 +106,7 @@ public class CustomerDashboardController {
         }
     }
 
-    /* ---------------------------------------------------------
-                        DEPOSIT
-    --------------------------------------------------------- */
+
     @FXML
     protected void onDeposit() {
 
@@ -140,9 +134,7 @@ public class CustomerDashboardController {
         refreshAccountsList();
     }
 
-    /* ---------------------------------------------------------
-                        WITHDRAW
-    --------------------------------------------------------- */
+
     @FXML
     protected void onWithdraw() {
 
@@ -165,7 +157,7 @@ public class CustomerDashboardController {
 
         // Savings rule: cannot withdraw
         if (acc instanceof SavingsAccount) {
-            messageLabel.setText("❌ Savings Accounts CANNOT withdraw.");
+            messageLabel.setText(" Savings Accounts CANNOT withdraw.");
             return;
         }
 
@@ -174,7 +166,7 @@ public class CustomerDashboardController {
             boolean ok = w.withdraw(amount);
 
             if (!ok) {
-                messageLabel.setText("❌ Insufficient funds.");
+                messageLabel.setText(" Insufficient funds.");
                 return;
             }
 
@@ -187,9 +179,6 @@ public class CustomerDashboardController {
         }
     }
 
-    /* ---------------------------------------------------------
-                        LOGOUT
-    --------------------------------------------------------- */
     @FXML
     protected void onLogout() {
         try {
